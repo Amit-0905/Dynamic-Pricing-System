@@ -1,0 +1,105 @@
+
+version: '3.8'
+
+services:
+  # Pricing API Service
+  pricing-api:
+    build:
+      context: ./pricing-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_SERVERS=kafka:9092
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/pricing_db
+    depends_on:
+      - redis
+      - kafka
+      - postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - pricing-network
+
+  # Demand Forecasting Service
+  demand-forecaster:
+    build:
+      context: ./demand-forecaster
+    environment:
+      - KAFKA_SERVERS=kafka:9092
+      - MODEL_PATH=/models/lstm_demand_model.pth
+    volumes:
+      - ./models:/models
+    depends_on:
+      - kafka
+    networks:
+      - pricing-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pricing-network
+
+  # Apache Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - pricing-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    networks:
+      - pricing-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: pricing_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pricing-network
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - pricing-network
+
+volumes:
+  redis_data:
+  postgres_data:
+
+networks:
+  pricing-network:
+    driver: bridge

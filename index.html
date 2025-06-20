@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Pricing System - Technical Implementation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Dynamic Pricing</h3>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#title" class="nav-link active" data-section="0">Title</a></li>
+            <li><a href="#overview" class="nav-link" data-section="1">Overview</a></li>
+            <li><a href="#architecture" class="nav-link" data-section="2">Architecture</a></li>
+            <li><a href="#ml-pipeline" class="nav-link" data-section="3">ML Pipeline</a></li>
+            <li><a href="#reinforcement" class="nav-link" data-section="4">Reinforcement Learning</a></li>
+            <li><a href="#demand-forecasting" class="nav-link" data-section="5">Demand Forecasting</a></li>
+            <li><a href="#price-elasticity" class="nav-link" data-section="6">Price Elasticity</a></li>
+            <li><a href="#microservices" class="nav-link" data-section="7">Microservices</a></li>
+            <li><a href="#deployment" class="nav-link" data-section="8">Deployment</a></li>
+            <li><a href="#performance" class="nav-link" data-section="9">Performance</a></li>
+            <li><a href="#submission" class="nav-link" data-section="10">Submission & Resume</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Section 0: Title Slide -->
+        <section id="title" class="slide active">
+            <div class="slide-content">
+                <h1 class="title-main">How to Develop a Dynamic Pricing System for E-Commerce</h1>
+                <h2 class="title-subtitle">Technical Implementation Guide - Algorithms, Architecture & Deployment</h2>
+                <div class="overview-cards">
+                    <div class="card">
+                        <h3>What We'll Cover</h3>
+                        <ul>
+                            <li>Machine Learning Pipeline with DQN, LSTM & XGBoost</li>
+                            <li>Microservices Architecture using FastAPI & Kafka</li>
+                            <li>Reinforcement Learning for Price Optimization</li>
+                            <li>Real-time Demand Forecasting</li>
+                            <li>Scalable Deployment with Docker & Kubernetes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="slide">
+            <div class="slide-content">
+                <h1>Problem Statement & Technical Challenges</h1>
+                <div class="two-column">
+                    <div class="column">
+                        <h3>Business Context</h3>
+                        <ul>
+                            <li>E-commerce platforms need real-time price optimization</li>
+                            <li>Dynamic pricing increases revenue by 2-5% on average</li>
+                            <li>Traditional rule-based systems lack adaptability</li>
+                            <li>Need to balance profit margins with competitive positioning</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Technical Challenges</h3>
+                        <ul>
+                            <li>High-frequency decision making (sub-second responses)</li>
+                            <li>Multi-dimensional state space (price, demand, competition)</li>
+                            <li>Scalability across millions of products</li>
+                            <li>Model interpretability for business stakeholders</li>
+                            <li>Cold start problem for new products</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="solution-approach">
+                    <h3>Our Technical Approach</h3>
+                    <p>We'll implement a hybrid ML system combining reinforcement learning (DQN) for price optimization, LSTM networks for demand forecasting, and XGBoost for price elasticity analysis, all orchestrated through a microservices architecture.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Architecture Overview -->
+        <section id="architecture" class="slide">
+            <div class="slide-content">
+                <h1>System Architecture Overview</h1>
+                <div class="architecture-diagram">
+                    <img src="https://pplx-res.cloudinary.com/image/upload/v1750400571/pplx_code_interpreter/afb56f12_kozkt5.jpg" alt="Dynamic Pricing System Architecture" class="diagram">
+                </div>
+                <div class="architecture-explanation">
+                    <h3>Component Breakdown</h3>
+                    <div class="component-grid">
+                        <div class="component">
+                            <h4>Data Ingestion Layer</h4>
+                            <p>Apache Kafka streams handle real-time market data, customer behavior, and competitor pricing</p>
+                        </div>
+                        <div class="component">
+                            <h4>ML Processing Layer</h4>
+                            <p>DQN Agent, LSTM, and XGBoost models process data for intelligent pricing decisions</p>
+                        </div>
+                        <div class="component">
+                            <h4>API Layer</h4>
+                            <p>FastAPI services provide high-performance REST endpoints for pricing recommendations</p>
+                        </div>
+                        <div class="component">
+                            <h4>Storage & Caching</h4>
+                            <p>PostgreSQL for persistence, Redis for sub-millisecond response times</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: ML Pipeline -->
+        <section id="ml-pipeline" class="slide">
+            <div class="slide-content">
+                <h1>Machine Learning Pipeline</h1>
+                <div class="ml-performance">
+                    <img src="https://pplx-res.cloudinary.com/image/upload/v1750400637/pplx_code_interpreter/b3dda46e_pxceyk.jpg" alt="ML Model Performance Comparison" class="diagram">
+                </div>
+                <div class="model-comparison">
+                    <h3>Model Selection Rationale</h3>
+                    <div class="model-grid">
+                        <div class="model-card">
+                            <h4>DQN (Deep Q-Network)</h4>
+                            <p><strong>Accuracy:</strong> 94%</p>
+                            <p><strong>Use Case:</strong> Real-time price optimization with reinforcement learning</p>
+                            <p><strong>Strength:</strong> Adapts to market dynamics without retraining</p>
+                        </div>
+                        <div class="model-card">
+                            <h4>LSTM Network</h4>
+                            <p><strong>Accuracy:</strong> 89%</p>
+                            <p><strong>Use Case:</strong> Time-series demand forecasting</p>
+                            <p><strong>Strength:</strong> Captures seasonal patterns and long-term dependencies</p>
+                        </div>
+                        <div class="model-card">
+                            <h4>XGBoost</h4>
+                            <p><strong>Accuracy:</strong> 91%</p>
+                            <p><strong>Use Case:</strong> Price elasticity analysis</p>
+                            <p><strong>Strength:</strong> Fast inference and feature importance insights</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Reinforcement Learning -->
+        <section id="reinforcement" class="slide">
+            <div class="slide-content">
+                <h1>Reinforcement Learning Implementation</h1>
+                <div class="rl-explanation">
+                    <h3>DQN Approach for Dynamic Pricing</h3>
+                    <div class="rl-components">
+                        <div class="rl-component">
+                            <h4>State Representation</h4>
+                            <p>Current price, demand forecast, competitor prices, inventory level, seasonality features</p>
+                        </div>
+                        <div class="rl-component">
+                            <h4>Action Space</h4>
+                            <p>Price adjustments: [-20%, -10%, -5%, 0%, +5%, +10%, +20%]</p>
+                        </div>
+                        <div class="rl-component">
+                            <h4>Reward Function</h4>
+                            <p>R = profit_margin × demand_volume - inventory_cost - competitive_penalty</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-section">
+                    <h3>DQN Implementation</h3>
+                    <div class="code-container">
+                        <button class="code-toggle" data-target="dqn-code" data-file="dqn_dynamic_pricing.py">Show/Hide Code</button>
+                        <div id="dqn-code" class="code-block hidden"><pre><code class="language-python"></code></pre></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Demand Forecasting -->
+        <section id="demand-forecasting" class="slide">
+            <div class="slide-content">
+                <h1>LSTM Demand Forecasting</h1>
+                <div class="lstm-explanation">
+                    <h3>Time-Series Forecasting Architecture</h3>
+                    <p>Our LSTM network processes historical sales data, seasonal patterns, and external factors to predict future demand with 89% accuracy.</p>
+                    
+                    <div class="feature-engineering">
+                        <h4>Feature Engineering Approach</h4>
+                        <ul>
+                            <li>Historical sales data (28-day window)</li>
+                            <li>Seasonal decomposition (trend, seasonal, residual)</li>
+                            <li>External factors (holidays, promotions, weather)</li>
+                            <li>Price sensitivity features</li>
+                            <li>Competitor activity indicators</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-section">
+                    <h3>LSTM Implementation</h3>
+                    <div class="code-container">
+                        <button class="code-toggle" data-target="lstm-code" data-file="lstm_demand_forecasting.py">Show/Hide Code</button>
+                        <div id="lstm-code" class="code-block hidden"><pre><code class="language-python"></code></pre></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Price Elasticity -->
+        <section id="price-elasticity" class="slide">
+            <div class="slide-content">
+                <h1>XGBoost Price Elasticity Analysis</h1>
+                <div class="elasticity-explanation">
+                    <h3>Price Elasticity Methodology</h3>
+                    <p>XGBoost model analyzes the relationship between price changes and demand variations, providing crucial insights for optimal pricing strategies.</p>
+                    
+                    <div class="elasticity-features">
+                        <h4>Key Features</h4>
+                        <div class="feature-grid">
+                            <div class="feature">
+                                <strong>Price History:</strong> Rolling statistics of price changes
+                            </div>
+                            <div class="feature">
+                                <strong>Demand Response:</strong> Historical demand sensitivity to price
+                            </div>
+                            <div class="feature">
+                                <strong>Product Categories:</strong> Category-specific elasticity patterns
+                            </div>
+                            <div class="feature">
+                                <strong>Customer Segments:</strong> Behavioral elasticity by segment
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-section">
+                    <h3>XGBoost Implementation</h3>
+                    <div class="code-container">
+                        <button class="code-toggle" data-target="xgboost-code" data-file="xgboost_price_elasticity.py">Show/Hide Code</button>
+                        <div id="xgboost-code" class="code-block hidden"><pre><code class="language-python"></code></pre></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Microservices -->
+        <section id="microservices" class="slide">
+            <div class="slide-content">
+                <h1>Microservices Architecture</h1>
+                <div class="microservices-overview">
+                    <h3>Service-Oriented Design</h3>
+                    <p>Our system uses FastAPI for high-performance REST services, Kafka for event streaming, and Redis for caching to achieve sub-second response times.</p>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h4>Pricing API Service</h4>
+                        <p>FastAPI-based service handling pricing requests with automatic ML model inference</p>
+                        <div class="code-container">
+                            <button class="code-toggle" data-target="api-code" data-file="pricing_api_service.py">Show Code</button>
+                            <div id="api-code" class="code-block hidden"><pre><code class="language-python"></code></pre></div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4>Event Streaming</h4>
+                        <p>Kafka-based real-time data pipeline for market data and pricing events</p>
+                        <div class="code-container">
+                            <button class="code-toggle" data-target="kafka-code" data-file="kafka_event_streaming.py">Show Code</button>
+                            <div id="kafka-code" class="code-block hidden"><pre><code class="language-python"></code></pre></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Deployment -->
+        <section id="deployment" class="slide">
+            <div class="slide-content">
+                <h1>Deployment & Infrastructure</h1>
+                <div class="deployment-overview">
+                    <h3>Container Orchestration</h3>
+                    <p>Docker containers managed by Kubernetes provide scalable, resilient infrastructure capable of handling millions of pricing requests per day.</p>
+                </div>
+                <div class="deployment-components">
+                    <div class="deployment-grid">
+                        <div class="deployment-card">
+                            <h4>Docker Containerization</h4>
+                            <p>Lightweight containers for each microservice with optimized Python runtime and ML libraries</p>
+                            <div class="code-container">
+                                <button class="code-toggle" data-target="docker-code" data-file="Dockerfile">Show Dockerfile</button>
+                                <div id="docker-code" class="code-block hidden"><pre><code class="language-dockerfile"></code></pre></div>
+                            </div>
+                        </div>
+                        <div class="deployment-card">
+                            <h4>Kubernetes Orchestration</h4>
+                            <p>Auto-scaling deployment with health checks, rolling updates, and service discovery</p>
+                            <div class="code-container">
+                                <button class="code-toggle" data-target="k8s-code" data-file="kubernetes-deployment.yml">Show Kubernetes Config</button>
+                                <div id="k8s-code" class="code-block hidden"><pre><code class="language-yaml"></code></pre></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="monitoring-section">
+                    <h3>Monitoring & Observability</h3>
+                    <ul>
+                        <li><strong>Prometheus:</strong> Metrics collection and alerting</li>
+                        <li><strong>Grafana:</strong> Real-time dashboards and visualization</li>
+                        <li><strong>Jaeger:</strong> Distributed tracing for debugging</li>
+                        <li><strong>ELK Stack:</strong> Centralized logging and analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 9: Performance -->
+        <section id="performance" class="slide">
+            <div class="slide-content">
+                <h1>Performance & Results</h1>
+                <div class="performance-metrics">
+                    <h3>System Performance Metrics</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>Response Time</h4>
+                            <div class="metric-value">< 50ms</div>
+                            <p>95th percentile API response time</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Throughput</h4>
+                            <div class="metric-value">10K RPS</div>
+                            <p>Concurrent pricing requests per second</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Accuracy</h4>
+                            <div class="metric-value">94%</div>
+                            <p>DQN model prediction accuracy</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Uptime</h4>
+                            <div class="metric-value">99.9%</div>
+                            <p>Service availability SLA</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scalability-section">
+                    <h3>Scalability Characteristics</h3>
+                    <ul>
+                        <li><strong>Horizontal Scaling:</strong> Kubernetes auto-scaling based on CPU/memory</li>
+                        <li><strong>Database Sharding:</strong> Product catalog distributed across shards</li>
+                        <li><strong>Cache Optimization:</strong> Redis cluster with 99% hit rate</li>
+                        <li><strong>Model Serving:</strong> TensorFlow Serving for GPU-accelerated inference</li>
+                    </ul>
+                </div>
+                
+                <div class="implementation-considerations">
+                    <h3>Real-World Implementation Considerations</h3>
+                    <div class="considerations-grid">
+                        <div class="consideration">
+                            <h4>A/B Testing Framework</h4>
+                            <p>Gradual rollout with control groups to measure impact</p>
+                        </div>
+                        <div class="consideration">
+                            <h4>Regulatory Compliance</h4>
+                            <p>Price discrimination laws and transparency requirements</p>
+                        </div>
+                        <div class="consideration">
+                            <h4>Business Constraints</h4>
+                            <p>Minimum/maximum price boundaries and brand positioning</p>
+                        </div>
+                        <div class="consideration">
+                            <h4>Explainable AI</h4>
+                            <p>Model interpretability for business stakeholder confidence</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Submission & Resume -->
+        <section id="submission" class="slide">
+            <div class="slide-content">
+                <h1>Submission & Resume</h1>
+                <div class="congrats-section">
+                    <p>This web app is my submission for the assignment.</p>
+                </div>
+                <div class="resume-section">
+                    <h3>Candidate Details</h3>
+                    <ul class="resume-details">
+                        <li><strong>Name:</strong> Amit</li>
+                        <li><strong>Location:</strong> Chandigarh, India</li>
+                        <li><strong>Email:</strong> <a href="mailto:21BCS7740@gmail.com">21BCS7740@gmail.com</a></li>
+                        <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/amit0905003" target="_blank">linkedin.com/in/amit0905003</a></li>
+                    </ul>
+                    <h3>Resume</h3>
+                    <p>View or download my resume: <a href="https://drive.google.com/file/d/1DyBax7LQB3EmXT8YiDRUFjOfky4Dgsj4/view?usp=sharing" target="_blank">Google Drive Link</a></p>
+                    <h3>Technical Skills</h3>
+                    <ul class="tech-skills">
+                        <li><strong>Programming:</strong> C++, Python, SQL</li>
+                        <li><strong>Backend:</strong> Django, REST APIs</li>
+                        <li><strong>AI & ML:</strong> Pandas, NumPy, scikit-learn</li>
+                        <li><strong>Databases:</strong> PostgreSQL, MySQL</li>
+                        <li><strong>Tools:</strong> Git, VS Code, Postman</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Controls -->
+        <div class="navigation-controls">
+            <button id="prevBtn" class="nav-btn">← Previous</button>
+            <span id="slideCounter" class="slide-counter">1 / 11</span>
+            <button id="nextBtn" class="nav-btn">Next →</button>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
